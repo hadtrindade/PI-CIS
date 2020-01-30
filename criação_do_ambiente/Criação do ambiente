@@ -1,0 +1,8 @@
+1- Instanciando um container lxc com base Debian 9  Stretch:
+	1.1 lxc-create -t download -n cis
+	1.2 debian
+	1.3 stretch
+	1.4 amd64
+2- Instalação de pacotes e libs para o ambiante:
+	2.1 lxc-start -n cis && lxc-attach -n cis
+	2.2 apt install openssh-server bind9 net-tools vim inetutils-ping dnsutils  zip unzip bzip2 unrar-free wget -y
