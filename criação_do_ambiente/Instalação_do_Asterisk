@@ -24,3 +24,7 @@
 			TRUE=/bin/true
 	}
 	3.3 systemctl enable asterisk
+4- importando schema asterisk no OpenLDAP
+	4.1 cp usr/src/asterisk-certified-13.21-cert2/contrib/scripts/asterisk.ldap-schema /etc/ldap/schema/asterisk.schema
+	4.2 /etc/init.d/slapd restart
+	4.3 cd usr/src/asterisk-certified-13.21-cert2/contrib/scripts/ ; ldapadd -Y EXTERNAL -H ldapi:/// -f asterisk.ldif
