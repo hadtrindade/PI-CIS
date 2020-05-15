@@ -11,3 +11,6 @@ Criar uma central telefônica integrada aos sistemas da empresa, capaz de realiz
 1. `cp asterisk/* /etc/asterisk/`
 1. Copiar arquivos das AGIs de asterisk_agi-bin para [/var/lib/asterisk/agi-bin/](https://github.com/hadtrindade/PI-CIS/tree/master/asterisk_agi-bin)
 1. `cp asterisk_agi-bin/* /var/lib/asterisk/agi-bin/`
+
+
+teste.
