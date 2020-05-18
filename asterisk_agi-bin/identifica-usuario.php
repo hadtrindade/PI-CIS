@@ -1,24 +1,35 @@
 #!/usr/bin/php
 <?php
-require_once 'phpagi.php';
-$agi= new AGI();
 
-$cpfcnpj=$argv[1];
-$con=mysqli_connect("localhost","usuario","senha","glpi") or die(mysqli_error($con));
-$sql=mysqli_query($con,"SELECT glpi_users.id, glpi_users.firstname, glpi_users.realname, glpi_locations.latitude, glpi_locations.longitude FROM glpi_users, glpi_locations WHERE glpi_locations.id = glpi_users.locations_id and glpi_users.name='$cpfcnpj'");
-if (mysqli_num_rows($sql) == 0){
+	require_once 'App/PhpAgi/phpagi.php';
+	require_once 'InitSession.php';
+	require_once 'Tokens.php';
+	require_once 'Payload.php';
+	require_once 'PicisCurl.php';
 
-	$agi->set_variable("CINVALIDO", mysqli_num_rows($sql));
+	//Buscar usuário
 
-}else{
+	$cpfcnpj=$argv[1];
 
+	$c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/User/');
+	$c->setHeaders($headers);
+	$c->setMethod('GET');
+	$response = $c->createCurl();
+	$i = array_search($cpfcnpj, array_column($response, 'name'));
+
+	$linkLocantion = $response[$i]['links'][0]['href'];
+
+	$c1 = new PicisCurl($linkLocantion);
+	$c1->setHeaders($headers);
+	$c1->setMethod('GET');
+	$responseLocation = $c1->createCurl();
+
+	$agi= new AGI();
 	$agi->set_variable("CINVALIDO", 1);
-	$ln=mysqli_fetch_all($sql);
-	$agi->set_variable("IDCLIENTE", $ln[0][0]);
-	$agi->set_variable("NCLIENTE", $ln[0][1]);
-	$agi->set_variable("SNCLIENTE", $ln[0][2]);
-	$agi->set_variable("CLATITUDE", $ln[0][3]);
-	$agi->set_variable("CLONGITUDE", $ln[0][4]);
-};
+	$agi->set_variable("IDCLIENTE", $response[$i]['id']);
+	$agi->set_variable("NCLIENTE", $response[$i]['firstname']);
+	$agi->set_variable("SNCLIENTE", $response[$i]['realname']);
+	$agi->set_variable("CLATITUDE", $responseLocation['latitude']);
+	$agi->set_variable("CLONGITUDE", $responseLocation['longitude']);
 
 ?>

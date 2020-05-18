@@ -1,5 +1,5 @@
 <?php
-class OpenTicket {
+class Payload {
     private $data;
 
     public function __set($prop, $value){
@@ -9,10 +9,8 @@ class OpenTicket {
     public function Input(){
         $input['input'] = $this->data;
 
-        return $input;
+        return json_encode($input,true);
     }
-
-    
 
 }
 ?>

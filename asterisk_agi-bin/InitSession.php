@@ -1,5 +1,6 @@
 <?php
 require_once 'Tokens.php';
+require_once 'PicisCurl.php';
 
 final class InitSission {
     
@@ -9,10 +10,18 @@ final class InitSission {
 
         $keys = Tokens::Open('tokens');
 
-        $uri = "http://10.0.3.93/glpi/apirest.php/initSession?Content-Type=%20application/json&app_token=".$keys['app_token'] ."&user_token=".$keys['user_token'];
-        $response = json_decode(file_get_contents($uri), true);
-        
+        $headers =array(
+            'Content-Type: application/json',
+            'Authorization: user_token '.$keys['user_token'],
+            'App-Token: ' .$keys['app_token'],
+            );
+
+        $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/initSession');
+        $c->setHeaders($headers);
+        $c->setMethod('GET');
+        $response = $c->createCurl();
         return $response['session_token'];
+       
     }
 
 }

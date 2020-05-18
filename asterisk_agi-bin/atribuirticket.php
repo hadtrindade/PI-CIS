@@ -1,18 +1,34 @@
 #!/usr/bin/php
 <?php
 
-require_once 'phpagi.php';
-$agi= new AGI();
+	require_once 'InitSession.php';
+	require_once 'Tokens.php';
+	require_once 'Payload.php';
+	require_once 'PicisCurl.php';
 
-$nometecnico=$argv[1];
-$idticket=$argv[2];
+    $idTecnico=$argv[1];
+    $idTicket=$argv[2];
+
+    $post_field = new Payload();
+    $post_field->id              = $idTicket;
+    $post_field->users_id_assign = $idTecnico;
+    $payload = $post_field->Input();
 
 
-$con=mysqli_connect("localhost","user","senha","glpi") or die(mysqli_error($con));
-$sql=mysqli_query($con,"SELECT glpi_users.id FROM glpi_users WHERE  glpi_users.name='$nometecnico'");
-$lnnome=mysqli_fetch_all($sql);
-$idtecnico=$lnnome[0][0];
+    
+    $session_token = InitSission::requestTokenSession();
+    $keys = Tokens::Open('tokens');
+    $headers =array(
+        'Content-Type: application/json',
+        'App-Token: ' .$keys['app_token'],
+        'Session-Token: '.$session_token
+    );
 
-mysqli_query($con,"UPDATE glpi_tickets_users SET glpi_tickets_users.users_id ='$idtecnico' WHERE glpi_tickets_users.tickets_id ='$idticket' AND glpi_tickets_users.users_id ='20'");
+    $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/'.$idTicket);
+    $c->setHeaders($headers);
+    $c->setMethod('PUT');
+    $c->setPostField($payload);
+    $response = $c->createCurl();
+    print_r($response);
 
 ?>
