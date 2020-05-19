@@ -37,11 +37,24 @@ $c->setMethod('POST');
 $c->setPostField($payload);
 $response = $c->createCurl();
 
-print_r($response['id']);
+//print_r($response['id']);
 
+$cagentes=array();
+$tempos=array();
+$rua=array();
 
-
-
+$c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Washington,DC&destinations=New+York+City,NY&mode=driving&language=pt-BR&key=AIzaSyAFYV0FFPlwiIfR_52XXurVexqWplaLSkw');
+$c2->setMethod('GET');
+$responseDistance = $c2->createCurl();
+//print_r($responseDistance);
+$distance=$responseDistance['rows'][0]['elements'][0]['duration']['text'];
+$tempo=explode(' ',$distance);
+$ruaDestino=$responseDistance['destination_addresses'][0];
+$arua=explode(',',$ruaDestino);
+$ruaTecnico=$arua[0].', '.$arua[1].', '.$arua[2];
+array_push($rua, $ruaTecnico);
+array_push($cagentes,$ln[0][1]);
+array_push($tempos,$tempo[0]);
 
 
 ?>

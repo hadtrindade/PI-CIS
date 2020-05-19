@@ -52,8 +52,9 @@
     
             $s = curl_init();
             curl_setopt($s,CURLOPT_URL,           $this->_url);
-            curl_setopt($s,CURLOPT_HTTPHEADER,    $this->_headers);
-            //curl_setopt($s,CURLOPT_HEADER,        true);
+            if (is_array($this->_headers)){
+                curl_setopt($s,CURLOPT_HTTPHEADER,$this->_headers);
+            }
             curl_setopt($s,CURLOPT_TIMEOUT,       $this->_timeout);
             curl_setopt($s,CURLOPT_MAXREDIRS,     $this->_maxRedirects);
             curl_setopt($s,CURLOPT_RETURNTRANSFER,true);
@@ -78,8 +79,6 @@
                     curl_setopt($s, CURLOPT_POSTFIELDS, $this->_postfield);
                 break;
 
-                default:
-                    curl_setopt($s,CURLOPT_CUSTOMREQUEST, 'GET');
             }
 
             curl_setopt($s,CURLOPT_USERAGENT,$this->_useragent);

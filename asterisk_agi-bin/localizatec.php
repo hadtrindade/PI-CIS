@@ -1,42 +1,73 @@
 #!/usr/bin/php
 <?php
-require_once 'phpagi.php';
-$agi= new AGI();
+    require_once 'App/PhpAgi/phpagi.php';
+    require_once 'InitSession.php';
+	require_once 'Tokens.php';
+	require_once 'Payload.php';
+	require_once 'PicisCurl.php';
 
-$filaplt=$argv[1];
-$clatitude=$argv[2];
-$clongitude=$argv[3];
 
-$con=mysqli_connect("localhost","cis","1frn@ul@","glpi") or die(mysqli_error($con));
+    $filaPlantao      = $argv[1];
+    $clienteLatitude  = $argv[2];
+    $clienteLongitude = $argv[3];
 
-$agentes=str_replace('"','',$filaplt);
-$agentes1=str_replace('SIP/','',$agentes);
-$lagentes=explode(',',$agentes1);
-$cagentes=array();
-$tempos=array();
-$rua=array();
 
-for ($i=0; $i < count($lagentes); $i++) {
-    $consulta="SELECT  glpi_users.id, glpi_users.name, glpi_locations.latitude, glpi_locations.longitude FROM glpi_users, glpi_locations WHERE glpi_locations.id = glpi_users.locations_id and glpi_users.name='$lagentes[$i]'";
-    $sql = mysqli_query($con, $consulta);
-    $ln=mysqli_fetch_all($sql);
-    $json_loc = file_get_contents('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='.$clatitude.','.$clongitude.'&destinations='.$ln[0][2].','.$ln[0][3].'&key=chave');
-    $array_loc = json_decode($json_loc, true);
-    $ln1=$array_loc['rows'][0]['elements'][0]['duration']['text'];
-    $tempo=explode(' ',$ln1);
-    $trua=$array_loc['destination_addresses'][0];
-    $arua=explode(',',$trua);
-    $ruaagt=$arua[0].', '.$arua[1].', '.$arua[2];
-    array_push($rua, $ruaagt);
-    array_push($cagentes,$ln[0][1]);
-    array_push($tempos,$tempo[0]);
-};
+    $agentes      = str_replace('"','',$filaPlantao);
+    $agentes      = str_replace('SIP/','',$agentes);
+    $listaAgentes = explode(',',$agentes);
+    $listaPlantao = array();
+    $tempos       = array();
+    $rua          = array();
 
-$key=array_search(min($tempos), $tempos);
-$agenteplt=$cagentes[$key];
-$ruaagenteplt=$rua[$key];
-$agi->set_variable("AGENTEPLT", $agenteplt);
-$agi->set_variable("RUAAGENTEPLT", $ruaagenteplt);
-$agi->set_variable("TEMPOAGENTEPLT", min($tempos));
+    $headers =    array(
+        'Content-Type: application/json',
+        'App-Token: ' .$keys['app_token'],
+        'Session-Token: '.$session_token
+    );
+
+
+
+    for ($i=0; $i < count($listaAgentes); $i++) {
+
+        $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/User/');
+        $c->setHeaders($headers);
+        $c->setMethod('GET');
+        $responseUser = $c->createCurl();
+        $i = array_search($listaAgentes[$i], array_column($response, 'name'));
+        $nomeTecnico   = $responseUser[$i]['name'];
+        $linkLocantion = $response[$i]['links'][0]['href'];
+
+        $c1 = new PicisCurl($linkLocantion);
+        $c1->setHeaders($headers);
+        $c1->setMethod('GET');
+        $responseLocation = $c1->createCurl();
+        $latitudeTecnico  = $responseLocation['latitude'];
+        $longitudeTecnico = $responseLocation['longitude'];
+        
+        $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key=YOUR_KEY');
+        $c2->setMethod('GET');
+        $responseDistance = $c2->createCurl();
+        $distance=$responseDistance['rows'][0]['elements'][0]['duration']['text'];
+        $tempo=explode(' ',$distance);
+        $ruaDestino=$responseDistance['destination_addresses'][0];
+        $arua=explode(',',$ruaDestino);
+        $ruaTecnico=$arua[0].', '.$arua[1].', '.$arua[2];
+        array_push($rua, $ruaTecnico);
+        array_push($listaPlantao, $nomeTecnico);
+        array_push($tempos,$tempo[0]);
+
+        
+    };
+
+    $key=array_search(min($tempos), $tempos);
+    $tecnicoPlatao=$listaPlantao[$key];
+    $ruaTecnicoPlantao=$rua[$key];
+
+
+    $agi = new AGI();
+    $agi->set_variable("AGENTEPLT", $tecnicoPlatao);
+    $agi->set_variable("RUAAGENTEPLT", $ruaTecnicoPlantao);
+    $agi->set_variable("TEMPOAGENTEPLT", min($tempos));
+
 
 ?>

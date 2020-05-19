@@ -42,8 +42,5 @@ $c->setMethod('POST');
 $c->setPostField($payload);
 $response = $c->createCurl();
 
-print_r($response['id']);
-
-
 $agi= new AGI();
 $agi->set_variable("IDTICKET", $response['id']);

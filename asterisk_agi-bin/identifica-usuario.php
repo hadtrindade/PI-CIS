@@ -11,6 +11,14 @@
 
 	$cpfcnpj=$argv[1];
 
+	$session_token = InitSission::requestTokenSession();
+	$keys = Tokens::Open('tokens');
+	$headers =array(
+    'Content-Type: application/json',
+    'App-Token: ' .$keys['app_token'],
+    'Session-Token: '.$session_token
+);
+
 	$c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/User/');
 	$c->setHeaders($headers);
 	$c->setMethod('GET');

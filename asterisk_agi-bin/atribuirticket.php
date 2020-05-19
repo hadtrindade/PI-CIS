@@ -12,12 +12,12 @@
     $post_field = new Payload();
     $post_field->id              = $idTicket;
     $post_field->users_id_assign = $idTecnico;
-    $payload = $post_field->Input();
+    $payload    = $post_field->Input();
 
 
     
     $session_token = InitSission::requestTokenSession();
-    $keys = Tokens::Open('tokens');
+    $keys =          Tokens::Open('tokens');
     $headers =array(
         'Content-Type: application/json',
         'App-Token: ' .$keys['app_token'],
