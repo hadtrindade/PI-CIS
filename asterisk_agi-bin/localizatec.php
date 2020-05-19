@@ -47,7 +47,7 @@
         $latitudeTecnico  = $responseLocation['latitude'];
         $longitudeTecnico = $responseLocation['longitude'];
         
-        $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key='.$tokens['app_token']);
+        $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key='.$tokens['google_token']);
         $c2->setMethod('GET');
         $responseDistance = $c2->createCurl();
         $distance         = $responseDistance['rows'][0]['elements'][0]['duration']['text'];
@@ -65,7 +65,6 @@
     $key               = array_search(min($tempos), $tempos);
     $tecnicoPlatao     = $listaPlantao[$key];
     $ruaTecnicoPlantao = $rua[$key];
-
 
     $agi = new AGI();
     $agi->set_variable("AGENTEPLT", $tecnicoPlatao);
