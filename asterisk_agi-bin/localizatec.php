@@ -19,9 +19,12 @@
     $tempos       = array();
     $rua          = array();
 
+    $session_token = InitSission::requestTokenSession();
+    $tokens = Tokens::Open('tokens');
+
     $headers =    array(
         'Content-Type: application/json',
-        'App-Token: ' .$keys['app_token'],
+        'App-Token: ' .$tokens['app_token'],
         'Session-Token: '.$session_token
     );
 
@@ -44,24 +47,24 @@
         $latitudeTecnico  = $responseLocation['latitude'];
         $longitudeTecnico = $responseLocation['longitude'];
         
-        $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key=YOUR_KEY');
+        $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key='.$tokens['app_token']);
         $c2->setMethod('GET');
         $responseDistance = $c2->createCurl();
-        $distance=$responseDistance['rows'][0]['elements'][0]['duration']['text'];
-        $tempo=explode(' ',$distance);
-        $ruaDestino=$responseDistance['destination_addresses'][0];
-        $arua=explode(',',$ruaDestino);
-        $ruaTecnico=$arua[0].', '.$arua[1].', '.$arua[2];
+        $distance         = $responseDistance['rows'][0]['elements'][0]['duration']['text'];
+        $tempo            = explode(' ',$distance);
+        $ruaDestino       = $responseDistance['destination_addresses'][0];
+        $arua             = explode(',',$ruaDestino);
+        $ruaTecnico       = $arua[0].', '.$arua[1].', '.$arua[2];
         array_push($rua, $ruaTecnico);
         array_push($listaPlantao, $nomeTecnico);
-        array_push($tempos,$tempo[0]);
+        array_push($tempos, $tempo[0]);
 
         
     };
 
-    $key=array_search(min($tempos), $tempos);
-    $tecnicoPlatao=$listaPlantao[$key];
-    $ruaTecnicoPlantao=$rua[$key];
+    $key               = array_search(min($tempos), $tempos);
+    $tecnicoPlatao     = $listaPlantao[$key];
+    $ruaTecnicoPlantao = $rua[$key];
 
 
     $agi = new AGI();
