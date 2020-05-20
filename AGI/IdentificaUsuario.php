@@ -2,10 +2,10 @@
 <?php
 
 	require_once 'App/PhpAgi/phpagi.php';
-	require_once 'InitSession.php';
-	require_once 'Tokens.php';
-	require_once 'Payload.php';
-	require_once 'PicisCurl.php';
+	require_once 'App/Classes/InitSession.php';
+	require_once 'App/Classes/Tokens.php';
+	require_once 'APP/Classes/Payload.php';
+	require_once 'App/Classes/PicisCurl.php';
 
 	//Buscar usuário
 
