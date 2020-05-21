@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
-    require_once 'App/PhpAgi/phpagi.php';
-    require_once 'InitSession.php';
-	require_once 'Tokens.php';
-	require_once 'Payload.php';
-	require_once 'PicisCurl.php';
+    require_once 'PhpAgi/phpagi.php';
+    require_once 'Classes/InitSession.php';
+	require_once 'CLasses/Tokens.php';
+	require_once 'Classes/Payload.php';
+	require_once 'Classes/PicisCurl.php';
 
 
     $filaPlantao      = $argv[1];
@@ -20,7 +20,7 @@
     $rua          = array();
 
     $session_token = InitSission::requestTokenSession();
-    $tokens = Tokens::Open('tokens');
+    $tokens        = Tokens::Open('tokens');
 
     $headers =    array(
         'Content-Type: application/json',
@@ -35,8 +35,8 @@
         $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/User/');
         $c->setHeaders($headers);
         $c->setMethod('GET');
-        $responseUser = $c->createCurl();
-        $i = array_search($listaAgentes[$i], array_column($response, 'name'));
+        $responseUser  = $c->createCurl();
+        $i             = array_search($listaAgentes[$i], array_column($response, 'name'));
         $nomeTecnico   = $responseUser[$i]['name'];
         $linkLocantion = $response[$i]['links'][0]['href'];
 
@@ -50,14 +50,16 @@
         $c2 = new PicisCurl('https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='.$clienteLatitude.','.$clienteLongitude.'&destinations='.$latitudeTecnico.','.$longitudeTecnico.'&mode=driving&language=pt-BR&key='.$tokens['google_token']);
         $c2->setMethod('GET');
         $responseDistance = $c2->createCurl();
+        
         $distance         = $responseDistance['rows'][0]['elements'][0]['duration']['text'];
         $tempo            = explode(' ',$distance);
         $ruaDestino       = $responseDistance['destination_addresses'][0];
         $arua             = explode(',',$ruaDestino);
         $ruaTecnico       = $arua[0].', '.$arua[1].', '.$arua[2];
-        array_push($rua, $ruaTecnico);
+        
+        array_push($rua,          $ruaTecnico);
         array_push($listaPlantao, $nomeTecnico);
-        array_push($tempos, $tempo[0]);
+        array_push($tempos,       $tempo[0]);
 
         
     };
@@ -67,8 +69,8 @@
     $ruaTecnicoPlantao = $rua[$key];
 
     $agi = new AGI();
-    $agi->set_variable("AGENTEPLT", $tecnicoPlatao);
-    $agi->set_variable("RUAAGENTEPLT", $ruaTecnicoPlantao);
+    $agi->set_variable("AGENTEPLT",      $tecnicoPlatao);
+    $agi->set_variable("RUAAGENTEPLT",   $ruaTecnicoPlantao);
     $agi->set_variable("TEMPOAGENTEPLT", min($tempos));
 
 
