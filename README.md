@@ -16,5 +16,5 @@ Na CIS foram utilizadas as seguintes ténologias:
 1. Copiar arquivos de configuração de asterisk para [/etc/asterisk](https://github.com/hadtrindade/PI-CIS/tree/master/Asterisk)
 1. `cp Asterisk/* /etc/asterisk/`
 ## Aplicação CIS
-1. Copiar Classes para [/cis](https://github.com/hadtrindade/PI-CIS/tree/master/asterisk_agi-bin)
+1. Copiar Classes para [/cis](https://github.com/hadtrindade/PI-CIS/tree/master/App)
 1. `cp App/* /cis/`
