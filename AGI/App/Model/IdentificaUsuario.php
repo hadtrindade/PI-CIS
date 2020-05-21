@@ -1,11 +1,11 @@
 #!/usr/bin/php
 <?php
 
-	require_once 'App/PhpAgi/phpagi.php';
-	require_once 'App/Classes/InitSession.php';
-	require_once 'App/Classes/Tokens.php';
-	require_once 'APP/Classes/Payload.php';
-	require_once 'App/Classes/PicisCurl.php';
+	require_once 'PhpAgi/phpagi.php';
+	require_once 'Classes/InitSession.php';
+	require_once 'Classes/Tokens.php';
+	require_once 'Classes/Payload.php';
+	require_once 'Classes/PicisCurl.php';
 
 	//Buscar usuário
 

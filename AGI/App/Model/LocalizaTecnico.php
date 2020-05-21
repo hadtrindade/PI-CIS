@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
-    require_once 'App/PhpAgi/phpagi.php';
-    require_once 'App/Classes/InitSession.php';
-	require_once 'App/CLasses/Tokens.php';
-	require_once 'App/Classes/Payload.php';
-	require_once 'App/Classes/PicisCurl.php';
+    require_once 'PhpAgi/phpagi.php';
+    require_once 'Classes/InitSession.php';
+	require_once 'CLasses/Tokens.php';
+	require_once 'Classes/Payload.php';
+	require_once 'Classes/PicisCurl.php';
 
 
     $filaPlantao      = $argv[1];
