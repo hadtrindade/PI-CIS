@@ -46,6 +46,7 @@
         }
 
         public function AtribuirTicket($idTicket,$payload){
+
             $at = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/'.$idTicket);
             $at->setHeaders($this->_headers);
             $at->setMethod('PUT');
@@ -54,7 +55,14 @@
 
         }
         
-        public function OpenTicket(){
+        public function OpenTicket($payload){
+
+            $cp = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/');
+            $cp->setHeaders($this->_headers);
+            $cp->setMethod('POST');
+            $cp->setPostField($payload);
+            
+            return $cp->createCurl();
 
 
         }
