@@ -1,10 +1,9 @@
 #!/usr/bin/php
 <?php
 
-	require_once 'Classes/InitSession.php';
-	require_once 'Classes/Tokens.php';
-	require_once 'Classes/Payload.php';
-	require_once 'Classes/PicisCurl.php';
+    require_once 'Services/GlpiRest.php';
+    require_once 'Core/Payload.php';
+	
 
     $idTecnico=$argv[1];
     $idTicket=$argv[2];
@@ -14,21 +13,7 @@
     $post_field->users_id_assign = $idTecnico;
     $payload                     = $post_field->Input();
 
-
-    
-    $session_token = InitSission::requestTokenSession();
-    $keys          = Tokens::Open('tokens');
-    $headers       = array(
-        'Content-Type: application/json',
-        'App-Token: ' .$keys['app_token'],
-        'Session-Token: '.$session_token
-    );
-
-    $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/'.$idTicket);
-    $c->setHeaders($headers);
-    $c->setMethod('PUT');
-    $c->setPostField($payload);
-    $c->createCurl();
-    
+    $atribuirTicket = new GlpiRest();
+    $atribuirTicket->AtribuirTicket($idTicket,$payload);
 
 ?>
