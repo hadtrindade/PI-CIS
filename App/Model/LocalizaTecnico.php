@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
     require_once 'PhpAgi/phpagi.php';
-    require_once 'Services/SearchUser.php';
+    require_once 'Services/GlpiRest.php';
     require_once 'Services/DistanceMatrics.php';
 
 
@@ -19,8 +19,8 @@
 
     for ($i=0; $i < count($listaAgentes); $i++) {
 
-        $su               = new SearchUser($listaAgentes[$i]);
-        $responseUser     = $su->getUser();
+        $su               = new GlpiRest();
+        $responseUser     = $su->getUser($listaAgentes[$i]);
         $nomeTecnico      = $responseUser['name'];
         $responseLocation = $su->getLocation($responseUser);
 
