@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 
-	require_once 'Classes/InitSession.php';
-	require_once 'Classes/Tokens.php';
-	require_once 'Classes/Payload.php';
-	require_once 'Classes/PicisCurl.php';
+	require_once 'Core/InitSession.php';
+	require_once 'Core/Tokens.php';
+	require_once 'Core/Payload.php';
+	require_once 'Core/PicisCurl.php';
 
     $idTecnico=$argv[1];
     $idTicket=$argv[2];
