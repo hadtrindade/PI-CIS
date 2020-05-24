@@ -3,16 +3,14 @@
     require_once 'Tokens.php';
     require_once 'PicisCurl.php';
 
-    class SearchUser {
+    class GlpiRest {
         
-        private $_cpfcnpj;
         private $_session_token;
         private $_tokens;
         private $_headers;
 
-        public function __construct($cpfcnpj)
+        public function __construct()
         {
-            $this->_cpfcnpj        = $cpfcnpj;
             $this->_session_token  = InitSission::requestTokenSession();
 	        $this->_tokens         = Tokens::Open('tokens');
 	        $this->_headers        = array(
@@ -23,13 +21,13 @@
 
         }
 
-        public function  getUser(){
+        public function  getUser($cpfcnpj){
             
             $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/User/');
 	        $c->setHeaders($this->_headers);
 	        $c->setMethod('GET');
 	        $responseUser = $c->createCurl();
-            $i = array_search($this->_cpfcnpj, array_column($responseUser, 'name'));
+            $i = array_search($cpfcnpj, array_column($responseUser, 'name'));
             
             return $responseUser[$i];
         }
@@ -46,7 +44,20 @@
             return $responseLocation;
 
         }
-            
+
+        public function AtribuirTicket($idTicket,$payload){
+            $at = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/'.$idTicket);
+            $at->setHeaders($this->_headers);
+            $at->setMethod('PUT');
+            $at->setPostField($payload);
+            $at->createCurl();
+
+        }
+        
+        public function OpenTicket(){
+
+
+        }
 
     }
         

@@ -19,7 +19,7 @@
 
     for ($i=0; $i < count($listaAgentes); $i++) {
 
-        $su                = new SearchUser($listaAgentes[$i]);
+        $su               = new SearchUser($listaAgentes[$i]);
         $responseUser     = $su->getUser();
         $nomeTecnico      = $responseUser['name'];
         $responseLocation = $su->getLocation($responseUser);
