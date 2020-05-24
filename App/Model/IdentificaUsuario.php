@@ -2,14 +2,14 @@
 <?php
 
 	require_once 'PhpAgi/phpagi.php';
-	require_once 'Services/SearchUser.php';
+	require_once 'Services/GlpiRest.php';
 
 	//Buscar usuário
 
 	$cpfcnpj=$argv[1];
 
-	$s = new SearchUser($cpfcnpj);
-	$responseUser 	  = $s->getUser();
+	$s = new GlpiRest();
+	$responseUser 	  = $s->getUser($cpfcnpj);
 	$responseLocation = $s->getLocation($responseUser);
 
 	$agi= new AGI();
