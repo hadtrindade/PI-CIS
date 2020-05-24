@@ -33,8 +33,8 @@
         $distance         = $responseDistance['rows'][0]['elements'][0]['duration']['text'];
         $tempo            = explode(' ',$distance);
         $ruaDestino       = $responseDistance['destination_addresses'][0];
-        $arua             = explode(',',$ruaDestino);
-        $ruaTecnico       = $arua[0].', '.$arua[1].', '.$arua[2];
+        $listaRua         = explode(',',$ruaDestino);
+        $ruaTecnico       = $listaRua[0].', '.$listaRua[1].', '.$listaRua[2];
         
         array_push($rua,          $ruaTecnico);
         array_push($listaPlantao, $nomeTecnico);
