@@ -1,7 +1,8 @@
 #!/usr/bin/php
 <?php
 
-	require_once 'Services/GlpiRest.php';
+    require_once 'Services/GlpiRest.php';
+    require_once 'Core/Payload.php';
 	
 
     $idTecnico=$argv[1];
