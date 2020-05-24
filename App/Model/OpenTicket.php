@@ -22,11 +22,8 @@
     $post_field->requesttypes_id     = 1;
     $payload                         = $post_field->Input();
 
-    $c = new PicisCurl('http://10.0.3.93/glpi/apirest.php/Ticket/');
-    $c->setHeaders($headers);
-    $c->setMethod('POST');
-    $c->setPostField($payload);
-    $response = $c->createCurl();
+    $openTicket = new GlpiRest();
+    $response   = $openTicket->OpenTicket($payload);
 
     $agi= new AGI();
     $agi->set_variable("IDTICKET", $response['id']);
