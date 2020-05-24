@@ -1,6 +1,6 @@
 <?php
-    require_once 'PicisCurl.php';
-    require_once 'Tokens.php';
+    require_once 'Core/PicisCurl.php';
+    require_once 'Core/Tokens.php';
 
     class DistanceMetrics {
         private $_clienteLatitude;
