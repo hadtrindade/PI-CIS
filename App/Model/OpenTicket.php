@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
     require_once 'PhpAgi/phpagi.php';
+    require_once 'Core/Payload';
     require_once 'Services/GlpiRest.php';
 
     //Argumentos vindo da URA
