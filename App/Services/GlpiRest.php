@@ -1,7 +1,7 @@
 <?php
-    require_once 'InitSession.php';
-    require_once 'Tokens.php';
-    require_once 'PicisCurl.php';
+    require_once 'Core/InitSession.php';
+    require_once 'Core/Tokens.php';
+    require_once 'Core/PicisCurl.php';
 
     class GlpiRest {
         
